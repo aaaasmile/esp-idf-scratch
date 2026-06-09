@@ -43,3 +43,13 @@ Però non ho settato nulla. Invece ho definito
     #define CONFIG_ESP_WIFI_AUTH_WPA2_PSK 1
 per avere WPA2_PSK. Come l'ho trovato? Ho compilato il file wifi_scan.c invece die wifi_client.c
 così nel monitor ho visto le informazioni del mio SSID che m'interessa. 
+
+## https nella request
+
+Referenza il progetto su 
+
+    D:\Arduino\esp32-idf\idf\.espressif\v6.0.1\esp-idf\examples\protocols\esp_http_client\main
+
+Per una richiesta https mi server il CA root certificate che si può avere con:
+
+    openssl s_client -showcerts -connect invido.it:443 </dev/null

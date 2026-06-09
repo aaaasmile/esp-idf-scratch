@@ -77,6 +77,45 @@ static const char *TAG = "wifi station";
 
 static int s_retry_num = 0;
 
+extern const char invido_it_root_cert_pem_start[] asm("_binary_invido_it_root_cert_pem_start");
+extern const char invido_it_root_cert_pem_end[] asm("_binary_invido_it_root_cert_pem_end");
+
+esp_err_t _http_event_handler(esp_http_client_event_t *evt)
+{
+    switch(evt->event_id) {
+        case HTTP_EVENT_ERROR:
+            ESP_LOGD(TAG, "HTTP_EVENT_ERROR");
+            break;
+        case HTTP_EVENT_ON_CONNECTED:
+            ESP_LOGD(TAG, "HTTP_EVENT_ON_CONNECTED");
+            break;
+        case HTTP_EVENT_HEADER_SENT:
+            ESP_LOGD(TAG, "HTTP_EVENT_HEADER_SENT");
+            break;
+        case HTTP_EVENT_ON_HEADER:
+            ESP_LOGD(TAG, "HTTP_EVENT_ON_HEADER, key=%s, value=%s", evt->header_key, evt->header_value);
+            break;
+        case HTTP_EVENT_ON_HEADERS_COMPLETE:
+            ESP_LOGD(TAG, "HTTP_EVENT_ON_HEADERS_COMPLETE");
+            break;
+        case HTTP_EVENT_ON_DATA:
+            ESP_LOGD(TAG, "HTTP_EVENT_ON_DATA, len=%d", evt->data_len);
+            break;
+        case HTTP_EVENT_ON_FINISH:
+            ESP_LOGD(TAG, "HTTP_EVENT_ON_FINISH");
+            break;
+        case HTTP_EVENT_DISCONNECTED:
+            ESP_LOGI(TAG, "HTTP_EVENT_DISCONNECTED");
+            break;
+        case HTTP_EVENT_REDIRECT:
+            ESP_LOGD(TAG, "HTTP_EVENT_REDIRECT");
+            break;
+        default:
+            break;
+    }
+    return ESP_OK;
+}
+
 
 static void http_post_request(void) {
     char *post_data = "{\"sensor\":\"ESP32-C5\", \"value\":\"Hello, 5GHz!\"}";
@@ -84,7 +123,9 @@ static void http_post_request(void) {
     esp_http_client_config_t config = {
         .host = HOSTFORCONN,
         .path = PUBDATALINK,
-        .transport_type = HTTP_TRANSPORT_OVER_TCP,
+        .transport_type = HTTP_TRANSPORT_OVER_SSL,
+        .cert_pem = invido_it_root_cert_pem_start,
+        .event_handler = _http_event_handler,
         .timeout_ms = 5000, // 5-second timeout
     };
 
@@ -131,6 +172,7 @@ static void event_handler(void* arg, esp_event_base_t event_base,
         ESP_LOGI(TAG, "got ip:" IPSTR, IP2STR(&event->ip_info.ip));
         s_retry_num = 0;
         xEventGroupSetBits(s_wifi_event_group, WIFI_CONNECTED_BIT);
+        http_post_request();
     }
 }
 
