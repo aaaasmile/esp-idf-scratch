@@ -20,7 +20,7 @@ per sapere la porta:
 
 per il flash:
 
-    idf.py -p COM6 flash monitor
+    idf.py -p COM7 flash monitor
 
 L'esempio col quale sono partito è:
 

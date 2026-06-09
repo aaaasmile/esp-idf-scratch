@@ -29,6 +29,7 @@
 #define EXAMPLE_ESP_WIFI_SSID      STASSID
 #define EXAMPLE_ESP_WIFI_PASS      STAPSK
 #define EXAMPLE_ESP_MAXIMUM_RETRY  3
+#define CONFIG_ESP_STATION_EXAMPLE_WPA3_SAE_PWE_HUNT_AND_PECK 1
 
 #if CONFIG_ESP_STATION_EXAMPLE_WPA3_SAE_PWE_HUNT_AND_PECK
 #define ESP_WIFI_SAE_MODE WPA3_SAE_PWE_HUNT_AND_PECK
@@ -128,7 +129,7 @@ void wifi_init_sta(void)
              * to WIFI_AUTH_WEP/WIFI_AUTH_WPA_PSK and set the password with length and format matching to
              * WIFI_AUTH_WEP/WIFI_AUTH_WPA_PSK standards.
              */
-            .threshold.authmode = ESP_WIFI_SCAN_AUTH_MODE_THRESHOLD,
+            .threshold.authmode = WIFI_AUTH_WPA3_PSK,
             .sae_pwe_h2e = ESP_WIFI_SAE_MODE,
             .sae_h2e_identifier = EXAMPLE_H2E_IDENTIFIER,
 #ifdef CONFIG_ESP_WIFI_WPA3_COMPATIBLE_SUPPORT
