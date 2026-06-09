@@ -19,17 +19,20 @@
 #include "lwip/err.h"
 #include "lwip/sys.h"
 
-#include "secret.txt"
-
 /* The examples use WiFi configuration that you can set via project configuration menu
 
    If you'd rather not, just change the below entries to strings with
    the config you want - ie #define EXAMPLE_WIFI_SSID "mywifissid"
 */
+/* My Section -  Begin*/
+#include "secret.txt"
 #define EXAMPLE_ESP_WIFI_SSID      STASSID
 #define EXAMPLE_ESP_WIFI_PASS      STAPSK
 #define EXAMPLE_ESP_MAXIMUM_RETRY  3
 #define CONFIG_ESP_STATION_EXAMPLE_WPA3_SAE_PWE_HUNT_AND_PECK 1
+#define CONFIG_ESP_WIFI_AUTH_WPA2_PSK 1
+/* My Section -  End*/
+
 
 #if CONFIG_ESP_STATION_EXAMPLE_WPA3_SAE_PWE_HUNT_AND_PECK
 #define ESP_WIFI_SAE_MODE WPA3_SAE_PWE_HUNT_AND_PECK
@@ -129,7 +132,7 @@ void wifi_init_sta(void)
              * to WIFI_AUTH_WEP/WIFI_AUTH_WPA_PSK and set the password with length and format matching to
              * WIFI_AUTH_WEP/WIFI_AUTH_WPA_PSK standards.
              */
-            .threshold.authmode = WIFI_AUTH_WPA3_PSK,
+            .threshold.authmode = ESP_WIFI_SCAN_AUTH_MODE_THRESHOLD,
             .sae_pwe_h2e = ESP_WIFI_SAE_MODE,
             .sae_h2e_identifier = EXAMPLE_H2E_IDENTIFIER,
 #ifdef CONFIG_ESP_WIFI_WPA3_COMPATIBLE_SUPPORT

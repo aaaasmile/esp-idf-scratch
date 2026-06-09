@@ -37,3 +37,9 @@ Il compiler è la sezione nuova così anche compileCommands
 
     idf.py menuconfig
 Poi si va in Component Config -> WiFi
+Però non ho settato nulla. Invece ho definito 
+
+    #define CONFIG_ESP_STATION_EXAMPLE_WPA3_SAE_PWE_HUNT_AND_PECK 1
+    #define CONFIG_ESP_WIFI_AUTH_WPA2_PSK 1
+per avere WPA2_PSK. Come l'ho trovato? Ho compilato il file wifi_scan.c invece die wifi_client.c
+così nel monitor ho visto le informazioni del mio SSID che m'interessa. 
