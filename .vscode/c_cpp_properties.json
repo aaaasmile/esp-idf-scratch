@@ -1,0 +1,24 @@
+{
+    "configurations": [
+        {
+            "name": "esp32c5",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "D:/Arduino/esp32-idf/idf/.espressif/v6.0.1/esp-idf/components/**",
+                "C:/Espressif/tools/xtensa-esp-elf/esp-15.2.0_20251204/xtensa-esp-elf/xtensa-esp-elf/sys-include/**"
+            ],
+            "compilerPath": "C:\\Espressif\\tools\\xtensa-esp-elf\\esp-15.2.0_20251204\\xtensa-esp-elf\\bin\\xtensa-esp32-elf-gcc.exe",
+            "browse": {
+                "path": [
+                    "D:/Arduino/esp32-idf/idf/.espressif/v6.0.1/esp-idf/components/**",
+                    "${workspaceFolder}"
+                ],
+                "limitSymbolsToIncludedHeaders": true
+            },
+            "intelliSenseMode": "gcc-x64",
+            "cStandard": "c11",
+            "cppStandard": "c++17"
+        }
+    ],
+    "version": 4
+}
