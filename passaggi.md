@@ -14,7 +14,7 @@ per compilare il progetto:
 
     idf.py build
 
-per sapere la porta:
+per sapere la porta (funziona in PowerShell standalone, non in Terminal con Idf):
 
     mode
 
