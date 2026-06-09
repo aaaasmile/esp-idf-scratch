@@ -19,6 +19,8 @@
 #include "lwip/err.h"
 #include "lwip/sys.h"
 
+#include "esp_http_client.h"       // For HTTP client APIs
+
 /* The examples use WiFi configuration that you can set via project configuration menu
 
    If you'd rather not, just change the below entries to strings with
@@ -74,6 +76,40 @@ static EventGroupHandle_t s_wifi_event_group;
 static const char *TAG = "wifi station";
 
 static int s_retry_num = 0;
+
+
+static void http_post_request(void) {
+    char *post_data = "{\"sensor\":\"ESP32-C5\", \"value\":\"Hello, 5GHz!\"}";
+
+    esp_http_client_config_t config = {
+        .host = HOSTFORCONN,
+        .path = PUBDATALINK,
+        .transport_type = HTTP_TRANSPORT_OVER_TCP,
+        .timeout_ms = 5000, // 5-second timeout
+    };
+
+    esp_http_client_handle_t client = esp_http_client_init(&config);
+    if (client == NULL) {
+        ESP_LOGE(TAG, "Failed to initialize HTTP client");
+        return;
+    }
+
+    esp_http_client_set_method(client, HTTP_METHOD_POST);
+    esp_http_client_set_header(client, "Content-Type", "application/x-www-form-urlencoded");
+    esp_http_client_set_header(client, "DeviceToken", SENSOR_GUID_MY);
+    esp_http_client_set_post_field(client, post_data, strlen(post_data));
+
+    esp_err_t err = esp_http_client_perform(client);
+    if (err == ESP_OK) {
+        ESP_LOGI(TAG, "HTTP POST Status = %d, content_length = %d",
+                 esp_http_client_get_status_code(client),
+                 esp_http_client_get_content_length(client));
+    } else {
+        ESP_LOGE(TAG, "HTTP POST request failed: %s", esp_err_to_name(err));
+    }
+
+    esp_http_client_cleanup(client);
+}
 
 
 static void event_handler(void* arg, esp_event_base_t event_base,
