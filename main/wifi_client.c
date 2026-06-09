@@ -118,7 +118,7 @@ esp_err_t _http_event_handler(esp_http_client_event_t *evt)
 
 
 static void http_post_request(void) {
-    char *post_data = "{\"sensor\":\"ESP32-C5\", \"value\":\"Hello, 5GHz!\"}";
+    char *post_data = "TS: 1000, TEMP-RAW: 42, PRES: 345, HUMI-RAW: 3445, GASO: 332, IAQ: 11, IAQA: 32, TEMP: 43, HUMY: 27, CO2: 33, VOC: 1234";
 
     esp_http_client_config_t config = {
         .host = HOSTFORCONN,

@@ -53,3 +53,10 @@ Referenza il progetto su
 Per una richiesta https mi server il CA root certificate che si può avere con:
 
     openssl s_client -showcerts -connect invido.it:443 </dev/null
+Poi il trucco è configurare esp_http_client_config_t config  con:
+
+    .transport_type = HTTP_TRANSPORT_OVER_SSL,
+    .cert_pem = invido_it_root_cert_pem_start,
+Questo riesce a lanciare un http post usanto il protocollo https.
+
+Per controllare se i dati vengono ricevuti basta usare _iot_ su invido.it
