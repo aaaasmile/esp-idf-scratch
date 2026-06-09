@@ -26,4 +26,14 @@ L'esempio col quale sono partito è:
 
     D:\Arduino\esp32-idf\idf\.espressif\v6.0.1\esp-idf\examples\wifi\getting_started\station\main\station_example_main.c
 L'esempio che a me interessa è quello che si collega alla WLAN come client e non so per quale
-oscura ragione l'esempio è chiamato station.
+oscura ragione l'esempio è chiamato station. In ogni modo anche in https://wiki.seeedstudio.com/xiao_esp32c5_with_platformio/
+la modalità client è chiamata station.
+
+### c_cpp_properties.json
+Sono riuscito a crearlo usando DeepSeek e la versione che avevo usato per AndroSolitario.
+Il compiler è la sezione nuova così anche compileCommands
+
+### configurare WiFi
+
+    idf.py menuconfig
+Poi si va in Component Config -> WiFi

@@ -8,6 +8,7 @@
                 "C:/Espressif/tools/xtensa-esp-elf/esp-15.2.0_20251204/xtensa-esp-elf/xtensa-esp-elf/sys-include/**"
             ],
             "compilerPath": "C:\\Espressif\\tools\\xtensa-esp-elf\\esp-15.2.0_20251204\\xtensa-esp-elf\\bin\\xtensa-esp32-elf-gcc.exe",
+            "compileCommands": "${workspaceFolder}/build/compile_commands.json", // [!code highlight]
             "browse": {
                 "path": [
                     "D:/Arduino/esp32-idf/idf/.espressif/v6.0.1/esp-idf/components/**",
