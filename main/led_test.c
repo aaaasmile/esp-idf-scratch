@@ -7,13 +7,13 @@
 #include "freertos/task.h"
 #include "nvs_flash.h"
 
-#define GPIO_OUTPUT_LED_RED 28    // Select GPIO28
-#define GPIO_OUTPUT_LED_GREEN 6  // Select GPIO6
-#define GPIO_OUTPUT_LED_YELLOW 7 // Select GPIO7
+#define GPIO_OUTPUT_LED_RED 28     // Select GPIO28
+#define GPIO_OUTPUT_LED_YELLOW 27  // Select GPIO27
+#define GPIO_OUTPUT_LED_GREEN 23    // Select GPIO23
 
-#define GPIO_OUTPUT_PIN_SEL (1ULL << GPIO_OUTPUT_LED_RED)                               
-    /* ((1ULL << GPIO_OUTPUT_LED_RED) | (1ULL << GPIO_OUTPUT_LED_GREEN) | \
-      (1ULL << GPIO_OUTPUT_LED_YELLOW)) */
+#define GPIO_OUTPUT_PIN_SEL                                            \
+    ((1ULL << GPIO_OUTPUT_LED_RED) | (1ULL << GPIO_OUTPUT_LED_GREEN) | \
+     (1ULL << GPIO_OUTPUT_LED_YELLOW))
 
 void app_main(void) {
     esp_err_t ret = nvs_flash_init();
@@ -40,7 +40,7 @@ void app_main(void) {
         printf("cnt: %d -> val = %d\n", cnt++, val);
         vTaskDelay(1000 / portTICK_PERIOD_MS);
         gpio_set_level(GPIO_OUTPUT_LED_RED, val);
-        //gpio_set_level(GPIO_OUTPUT_LED_YELLOW, cnt % 2);
-        //gpio_set_level(GPIO_OUTPUT_LED_GREEN, cnt % 2);
+        gpio_set_level(GPIO_OUTPUT_LED_YELLOW, val);
+        gpio_set_level(GPIO_OUTPUT_LED_GREEN, val);
     }
 }
