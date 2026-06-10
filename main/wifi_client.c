@@ -1,10 +1,5 @@
-/* WiFi station Example
-
-   This example code is in the Public Domain (or CC0 licensed, at your option.)
-
-   Unless required by applicable law or agreed to in writing, this
-   software is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-   CONDITIONS OF ANY KIND, either express or implied.
+/*Used to test wifi 5Ghz client connection to a wifi router 
+I also tested an https post to the server
 */
 #include <string.h>
 #include "freertos/FreeRTOS.h"
@@ -118,7 +113,7 @@ esp_err_t _http_event_handler(esp_http_client_event_t *evt)
 
 
 static void http_post_request(void) {
-    char *post_data = "TS: 1000, TEMP-RAW: 42, PRES: 345, HUMI-RAW: 3445, GASO: 332, IAQ: 11, IAQA: 32, TEMP: 43, HUMY: 27, CO2: 33, VOC: 1234";
+    char *post_data = "TS: 1000, TEMP-RAW: 25, PRES: 345, HUMI-RAW: 3445, GASO: 332, IAQ: 11, IAQA: 32, TEMP: 43, HUMY: 27, CO2: 33, VOC: 1234";
 
     esp_http_client_config_t config = {
         .host = HOSTFORCONN,

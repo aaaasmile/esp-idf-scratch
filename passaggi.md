@@ -2,8 +2,9 @@
 Per avere idf in Visual Code, che va lanciato in PowerShell con start_code.ps1, devo lanciare nel terminal:
 
     C:\Espressif\tools\Microsoft.v6.0.1.PowerShell_profile.ps1
+Il comando sopra è fonadamentale in quanto il build, flash e monitor avviene tutto usando la command line.
 
-per settare il target
+Per settare il target
 
     idf.py set-target esp32c5
     
@@ -60,3 +61,30 @@ Poi il trucco è configurare esp_http_client_config_t config  con:
 Questo riesce a lanciare un http post usanto il protocollo https.
 
 Per controllare se i dati vengono ricevuti basta usare _iot_ su invido.it
+
+## Schema de ESP32 C5
+
+
+                                                             +---------------------------+
+                                                             |                           |
++------------------+                                         |                        D5 +--------->  Led Red
+|                  |                                         |                           |
+|                  |  VCC                                    |                        D6 +--------->  Led Green
+|                  +-----------------------------------------|  3v3                      |
+|                  |  GND                                    |                           |
+|                  +-----------------------------------------+  GND                   D7 +--------->  Led Yellow
+|     BME680       |  SCL                                    |                           |
+|                  +-----------------------------------------+  D1                       |
+|                  |                                         |                           |
+|                  |  SDA                                    |                           |
+|                  |                                         |             ESP32-C5      |
+|                  +---------------------------------------->+                           |
++------------------+                                         |  D2                       |
+                                                             |                  Adc1-ch3 +---------> Button
+                                                             |                           |
+                                                             +---------------------------+
+
+
+Il tasto per mostrare lo stato è collegato al pin A0 con una resistenza di 220Ohm. Il tasto
+è collegato in diagonale e l'altro capo è 3.3V. Quando il tasto è premuto il valore di A0 va sale a 1024.
+Quando non è premuto il valore letto è < 10. Ho visto 1 e 7 nel log.  
