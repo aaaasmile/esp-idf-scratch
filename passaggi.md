@@ -8,9 +8,12 @@ Le funzionalità che ho testato qui sono:
 - https client post
 - led on/of via GPIO
 
+## Sviluppo
+
 Per avere idf in Visual Code, che va lanciato in PowerShell con start_code.ps1, devo lanciare nel terminal:
 
     C:\Espressif\tools\Microsoft.v6.0.1.PowerShell_profile.ps1
+
 Il comando sopra è fonadamentale in quanto il build, flash e monitor avviene tutto usando la command line.
 
 Per settare il target
