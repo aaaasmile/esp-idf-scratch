@@ -3,18 +3,19 @@ In questo progetto ho una serie di files in c per testare le singole funzionalit
 per replicare il progetto GasTempBME680 (sviluppato con PlatformIO) per il target esp32c5. 
 
 Nota che per usare il controller esp32c5 devo programmare in esp-idf e non posso riciclare il progetto precedente per ESP8266.
-Le funzionalità che ho testato qui sono:
+Le funzionalità che ho qui testato sono:
 - client wifi 5 Ghz
 - https client post
 - led on/of via GPIO
 
 ## Sviluppo
 
-Per avere idf in Visual Code, che va lanciato in PowerShell con start_code.ps1, devo lanciare nel terminal:
+Per avere idf in Visual Code esso va lanciato con start_code.ps1 run in Powershell.
+Una volta in Visual Code, nel terminal interno lancio:
 
     C:\Espressif\tools\Microsoft.v6.0.1.PowerShell_profile.ps1
 
-Il comando sopra è fonadamentale in quanto il build, flash e monitor avviene tutto usando la command line.
+Il comando sopra è fonadamentale in quanto il build, flash e monitor avviene usando la command line idf.py.
 
 Per settare il target
 
@@ -39,19 +40,21 @@ Per interrompere il Monitor uso la sequenza: CTRL + T CTRL + X
 L'esempio col quale sono partito è:
 
     D:\Arduino\esp32-idf\idf\.espressif\v6.0.1\esp-idf\examples\wifi\getting_started\station\main\station_example_main.c
-L'esempio che a me interessa è quello che si collega alla WLAN come client e non so per quale
-oscura ragione l'esempio è chiamato station. In ogni modo anche in https://wiki.seeedstudio.com/xiao_esp32c5_with_platformio/
-la modalità client è chiamata station.
+L'esempio che a me interessa è quello dove il controller si collega alla WLAN come client. Non so per quale
+oscura ragione l'esempio è chiamato _station_. In ogni modo anche in https://wiki.seeedstudio.com/xiao_esp32c5_with_platformio/
+la modalità client è chiamata _station_.
 
 ### c_cpp_properties.json
+Mi serve per avere la risoluzione dei simboli in Visual Code attraverso l'extension C++.
 Sono riuscito a crearlo usando DeepSeek e la versione che avevo usato per AndroSolitario.
-Il compiler è la sezione nuova così anche compileCommands
+Fai attenzione alle sezioni _compiler_  e _compileCommands_.
 
 ### configurare WiFi
+Molti parametri sono configurabili nel _menuconfig_
 
     idf.py menuconfig
 Poi si va in Component Config -> WiFi
-Però non ho settato nulla. Invece ho definito 
+Però qui non ho settato nulla. Invece ho definito 
 
     #define CONFIG_ESP_STATION_EXAMPLE_WPA3_SAE_PWE_HUNT_AND_PECK 1
     #define CONFIG_ESP_WIFI_AUTH_WPA2_PSK 1
@@ -59,14 +62,13 @@ per avere WPA2_PSK. Come l'ho trovato? Ho compilato il file wifi_scan.c invece d
 così nel monitor ho visto le informazioni del mio SSID che m'interessa. 
 
 ## https nella request
-
-Referenza il progetto su 
+Il progetto di riferimento è: 
 
     D:\Arduino\esp32-idf\idf\.espressif\v6.0.1\esp-idf\examples\protocols\esp_http_client\main
 
-Per una richiesta https mi server il CA root certificate che si può avere con:
+Per una richiesta https mi server il CA root certificate del server che si può avere con:
 
-    openssl s_client -showcerts -connect invido.it:443 </dev/null
+    openssl s_client -showcerts -connect <dominio-server>:443 </dev/null
 Poi il trucco è configurare esp_http_client_config_t config  con:
 
     .transport_type = HTTP_TRANSPORT_OVER_SSL,
@@ -78,31 +80,33 @@ Per controllare se i dati vengono ricevuti basta usare _iot_ su invido.it
 ## Schema de ESP32 C5
 
 
-                                                             +---------------------------+
-                                                             |                           |
-+------------------+                                         |                   GPIO 28 +--------->  Led Red
-|                  |                                         |                           |
-|                  |  VCC                                    |                   GPIO 27 +--------->  Led Yellow
-|                  +-----------------------------------------|  3v3                      |
-|                  |  GND                                    |                           |
-|                  +-----------------------------------------+  GND              GPIO 23 +--------->  Led Green
-|     BME680       |  SCL                                    |                           |
-|                  +-----------------------------------------+  D1                       |
-|                  |                                         |                           |
-|                  |  SDA                                    |                           |
-|                  |                                         |             ESP32-C5      |
-|                  +---------------------------------------->+                           |
-+------------------+                                         |  D2                       |
-                                                             |                  Adc1-ch3 +---------> Button
-                                                             |                           |
-                                                             +---------------------------+
+                                                                 +---------------------------+
+                                                                 |                           |
+    +------------------+                                         |                   GPIO 28 +--------->  Led Red
+    |                  |                                         |                           |
+    |                  |  VCC                                    |                   GPIO 27 +--------->  Led Yellow
+    |                  +-----------------------------------------|  3v3                      |
+    |                  |  GND                                    |                           |
+    |                  +-----------------------------------------+  GND              GPIO 23 +--------->  Led Green
+    |     BME680       |  SCL                                    |                           |
+    |                  +-----------------------------------------+  D1                       |
+    |                  |                                         |                           |
+    |                  |  SDA                                    |                           |
+    |                  |                                         |             ESP32-C5      |
+    |                  +---------------------------------------->+                           |
+    +------------------+                                         |  D2                       |
+                                                                 |                  Adc1-ch3 +---------> Button
+                                                                 |                           |
+                                                                 +---------------------------+
 
 ### Led
 Per testare l'accensione e lo spegnimento dei tre leds ho creato il file led_test.c.
-Il problema principale che ho avuto è stato nell'effettuare il collegamento dei fili. Lo schema della parte superiore 
-non è precisa. Mentre è la parte posteriore dove sono chiari i collegamenti dei pin.
-Nel file esempio gpio_example_main.c risulta molto chiaro l'utilizzo della configurazione e delle funzioni da usare.
-
+Il problema principale che ho avuto è stato nell'effettuare il collegamento dei fili. 
+Lo schema della parte superiore non è precisa, mentre lo è la parte posteriore, quella che sta sulla basetta.
+Il file esempio gpio_example_main.c chiarisce molto bene l'utilizzo dei GPIO in fase di Output esd anche di Input.
+Il led sono collegati al pin del controller attraverso una resistenza di 220 Ohm che raggiunge 
+l'anodo (gambo lungo) del led. 
+Il catodo del led è collegato a massa (gambo corto del led).
 
 ## Pulsante per il check dello stato
 TODO
