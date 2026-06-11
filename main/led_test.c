@@ -34,6 +34,7 @@ void app_main(void) {
     };
     gpio_config(&io_conf);
 
+    // TODO: use lib/led_state that does not compile
     int cnt = 0;
     while (1) {
         int val = cnt % 2;
